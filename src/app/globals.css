@@ -608,7 +608,7 @@ h6 {
   height: 22px;
   border: 2px solid var(--accent-gold);
   border-radius: 50%;
-  animation: fadeOutWatch 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  animation: fadeOutWatch 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate;
 }
 
 .watch-face::before {
@@ -636,14 +636,14 @@ h6 {
   width: 2px;
   height: 8px;
   margin-left: -1px;
-  animation: spinMinute 3s cubic-bezier(0.2, 0, 0.1, 1) forwards;
+  animation: spinMinute 3s cubic-bezier(0.2, 0, 0.1, 1) infinite alternate;
 }
 
 .logo-hand.hour {
   width: 2px;
   height: 5px;
   margin-left: -1px;
-  animation: spinHour 3s cubic-bezier(0.2, 0, 0.1, 1) forwards;
+  animation: spinHour 3s cubic-bezier(0.2, 0, 0.1, 1) infinite alternate;
 }
 
 .mu-symbol {
@@ -653,11 +653,11 @@ h6 {
   text-transform: none;
   font-size: 1.7rem;
   opacity: 0;
-  animation: fadeInMu 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  animation: fadeInMu 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate;
 }
 
 .brand-text {
-  animation: slideInText 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  animation: slideInText 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate;
 }
 
 @keyframes spinMinute {
