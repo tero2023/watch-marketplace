@@ -82,7 +82,16 @@ export default function Home() {
 
       <nav className="navbar fade-in">
         <div className="container nav-container">
-          <div className="logo"><span style={{ color: "var(--accent-gold)", fontWeight: 300, marginRight: "0.2rem", textTransform: "none" }}>&mu;</span>MICRON</div>
+          <div className="animated-logo">
+            <div className="logo-icon">
+              <div className="watch-face">
+                <div className="logo-hand minute"></div>
+                <div className="logo-hand hour"></div>
+              </div>
+              <span className="mu-symbol">&mu;</span>
+            </div>
+            <span className="brand-text">MICRON</span>
+          </div>
           <div className="nav-links">
             <a href="#">Collections</a>
             <a href="#">Brands</a>
@@ -174,7 +183,16 @@ export default function Home() {
       <footer className="footer container fade-in" style={{ animationDelay: '0.4s' }}>
         <div className="footer-content">
           <div className="footer-brand">
-            <div className="logo" style={{ marginBottom: "1.5rem" }}><span style={{ color: "var(--accent-gold)", fontWeight: 300, marginRight: "0.2rem", textTransform: "none" }}>&mu;</span>MICRON</div>
+            <div className="animated-logo" style={{ marginBottom: "1.5rem" }}>
+              <div className="logo-icon">
+                <div className="watch-face">
+                  <div className="logo-hand minute"></div>
+                  <div className="logo-hand hour"></div>
+                </div>
+                <span className="mu-symbol">&mu;</span>
+              </div>
+              <span className="brand-text">MICRON</span>
+            </div>
             <p>Elevating the standard of luxury watch acquisition. Operating exclusively with verified collectors worldwide.</p>
           </div>
           <div className="footer-links">
