@@ -103,7 +103,10 @@ export default function Home() {
           </div>
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             {session ? (
-              <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Log Out</button>
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Welcome, <strong style={{ color: "var(--accent-gold)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Collector"}</strong></span>
+                <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Log Out</button>
+              </div>
             ) : (
               <button className="btn-outline" onClick={() => router.push("/signin")} style={{ padding: "0.5rem 1.5rem" }}>Sign In</button>
             )}
