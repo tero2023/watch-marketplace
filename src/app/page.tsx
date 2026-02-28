@@ -32,7 +32,7 @@ export default function Home() {
     <main>
       <nav className="navbar fade-in">
         <div className="container nav-container">
-          <div className="logo">Luxe<span style={{ color: "var(--accent-gold)", fontWeight: 300 }}>Time</span></div>
+          <div className="logo"><span style={{ color: "var(--accent-gold)", fontWeight: 300, marginRight: "0.2rem" }}>&mu;</span>MICRON</div>
           <div className="nav-links">
             <a href="#">Collections</a>
             <a href="#">Brands</a>
@@ -107,7 +107,7 @@ export default function Home() {
       <footer className="footer container fade-in" style={{ animationDelay: '0.4s' }}>
         <div className="footer-content">
           <div className="footer-brand">
-            <div className="logo" style={{ marginBottom: "1.5rem" }}>Luxe<span style={{ color: "var(--accent-gold)", fontWeight: 300 }}>Time</span></div>
+            <div className="logo" style={{ marginBottom: "1.5rem" }}><span style={{ color: "var(--accent-gold)", fontWeight: 300, marginRight: "0.2rem" }}>&mu;</span>MICRON</div>
             <p>Elevating the standard of luxury watch acquisition. Operating exclusively with verified collectors worldwide.</p>
           </div>
           <div className="footer-links">
@@ -139,7 +139,7 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 Luxe Timepieces Limited. All rights reserved.</p>
+          <p>&copy; 2026 MICRON Timepieces Limited. All rights reserved.</p>
         </div>
       </footer>
     </main>

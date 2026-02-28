@@ -13,7 +13,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Luxe Timepieces | Premium Watch Marketplace",
+  title: "MICRON | Premium Watch Marketplace",
   description: "Discover and acquire the world's most exquisite luxury watches.",
 };
 
