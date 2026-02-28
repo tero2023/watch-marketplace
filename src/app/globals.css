@@ -50,28 +50,58 @@ body {
 body::before {
   content: '';
   position: fixed;
-  top: -20%;
-  left: -10%;
-  width: 50vw;
-  height: 50vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: -1;
   pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.05) 0%, rgba(5, 5, 5, 0.95) 100%);
 }
 
+/* Dynamic Fine Watchmaking Background */
 body::after {
   content: '';
   position: fixed;
-  bottom: -20%;
-  right: -10%;
-  width: 60vw;
-  height: 60vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(100, 100, 100, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
-  z-index: -1;
+  top: -10%;
+  left: -10%;
+  width: 120vw;
+  height: 120vh;
+  z-index: -2;
   pointer-events: none;
+  background-image: url('/watch-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  /* Subtle opacity for elegance */
+  filter: grayscale(80%) contrast(1.2) sepia(20%) hue-rotate(10deg);
+  animation: dynamicWatchPanZoom 90s linear infinite alternate;
 }
+
+@keyframes dynamicWatchPanZoom {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  25% {
+    transform: scale(1.05) translate(-1%, 1%);
+  }
+
+  50% {
+    transform: scale(1.1) translate(1%, -1%);
+  }
+
+  75% {
+    transform: scale(1.05) translate(-1%, -1%);
+  }
+
+  100% {
+    transform: scale(1) translate(1%, 1%);
+  }
+}
+
+
 
 a {
   color: inherit;
