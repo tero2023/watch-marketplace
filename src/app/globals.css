@@ -62,7 +62,7 @@ body::before {
   height: 100vh;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.05) 0%, rgba(5, 5, 5, 0.95) 100%);
+  background: radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.8) 0%, rgba(15, 15, 15, 0.98) 100%);
 }
 
 /* Dynamic Fine Watchmaking Background */
@@ -79,10 +79,10 @@ body::after {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.35;
-  /* Subtle opacity for elegance */
-  filter: grayscale(80%) contrast(1.2) sepia(30%) hue-rotate(10deg);
-  animation: dynamicWatchPanZoom 90s linear infinite alternate;
+  opacity: 0.4;
+  /* Make floating grayish elements clearly visible but elegant */
+  filter: contrast(1.1) brightness(0.85);
+  animation: dynamicWatchPanZoom 120s linear infinite alternate;
 }
 
 @keyframes dynamicWatchPanZoom {
