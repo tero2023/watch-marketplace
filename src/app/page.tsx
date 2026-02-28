@@ -36,7 +36,7 @@ function OrderStatusBanner() {
         .navbar { margin-top: 50px !important; }
       `}</style>
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, background: "#1a472a", color: "white", padding: "1rem", zIndex: 1000, display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
-        <CheckCircle2 size={18} color="var(--accent-gold)" /> Su adquisición fue exitosa. Nuestro conserje se comunicará con usted en breve sobre la entrega.
+        <CheckCircle2 size={18} color="var(--accent-red)" /> Su adquisición fue exitosa. Nuestro conserje se comunicará con usted en breve sobre la entrega.
       </div>
     </>
   );
@@ -104,7 +104,7 @@ export default function Home() {
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             {session ? (
               <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Bienvenido, <strong style={{ color: "var(--accent-gold)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
+                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Bienvenido, <strong style={{ color: "var(--accent-red)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
                 <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Cerrar Sesión</button>
               </div>
             ) : (
@@ -115,7 +115,7 @@ export default function Home() {
               {itemCount > 0 && (
                 <span style={{
                   position: "absolute", top: "-8px", right: "-8px",
-                  backgroundColor: "var(--accent-gold)", color: "#000",
+                  backgroundColor: "var(--accent-red)", color: "#fff",
                   fontSize: "0.65rem", fontWeight: "bold", width: "18px", height: "18px",
                   borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center"
                 }}>
@@ -130,7 +130,7 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-content container slide-up">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem", color: "var(--accent-gold)", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "0.8rem", padding: "0.5rem 1rem", border: "1px solid var(--border-color)", borderRadius: "20px", background: "rgba(212, 175, 55, 0.05)" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem", color: "var(--accent-red)", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "0.8rem", padding: "0.5rem 1rem", border: "1px solid var(--border-color)", borderRadius: "20px", background: "rgba(0, 0, 0, 0.03)" }}>
             <Diamond size={14} /> Solo Piezas Auténticas
           </div>
           <h1>Elegancia Atemporal, <br /> Redefinida.</h1>
@@ -142,14 +142,14 @@ export default function Home() {
 
           <div style={{ display: "flex", justifyContent: "center", gap: "4rem", marginTop: "5rem", opacity: 0.7 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <ShieldCheck size={24} color="var(--accent-gold)" />
+              <ShieldCheck size={24} color="var(--accent-red)" />
               <div style={{ textAlign: "left" }}>
                 <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Garantía</div>
                 <div style={{ fontSize: "0.8rem", color: "#888" }}>100% Auténtico</div>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <Clock size={24} color="var(--accent-gold)" />
+              <Clock size={24} color="var(--accent-red)" />
               <div style={{ textAlign: "left" }}>
                 <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Envío Asegurado</div>
                 <div style={{ fontSize: "0.8rem", color: "#888" }}>Entrega Mundial</div>

@@ -47,7 +47,7 @@ export default function Register() {
     if (success) {
         return (
             <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-                <div style={{ textAlign: "center", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px", color: "var(--accent-gold)" }} className="fade-in">
+                <div style={{ textAlign: "center", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px", color: "var(--accent-red)" }} className="fade-in">
                     <Diamond size={32} style={{ margin: "0 auto 1.5rem" }} />
                     <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Solicitud Aprobada</h2>
                     <p style={{ color: "#fff" }}>Su portafolio ha sido creado. Redirigiendo al inicio de sesión...</p>
@@ -111,7 +111,7 @@ export default function Register() {
                 </form>
 
                 <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", color: "#888" }}>
-                    ¿Ya es coleccionista? <Link href="/signin" style={{ color: "var(--accent-gold)" }}>Iniciar Sesión</Link>
+                    ¿Ya es coleccionista? <Link href="/signin" style={{ color: "var(--accent-red)" }}>Iniciar Sesión</Link>
                 </div>
             </div>
         </main>

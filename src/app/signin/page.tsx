@@ -38,7 +38,7 @@ export default function SignIn() {
             <div style={{ maxWidth: "400px", width: "100%", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px" }} className="fade-in">
                 <div style={{ textAlign: "center", marginBottom: "2rem" }}>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                        <Diamond size={24} color="var(--accent-gold)" />
+                        <Diamond size={24} color="var(--accent-red)" />
                     </div>
                     <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>Iniciar Sesión</h1>
                     <p style={{ color: "#888", fontSize: "0.9rem" }}>Acceda a su portafolio exclusivo MICRON</p>
@@ -79,7 +79,7 @@ export default function SignIn() {
                 </form>
 
                 <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", color: "#888" }}>
-                    ¿Aún no tiene una cuenta? <Link href="/register" style={{ color: "var(--accent-gold)" }}>Solicitar Acceso</Link>
+                    ¿Aún no tiene una cuenta? <Link href="/register" style={{ color: "var(--accent-red)" }}>Solicitar Acceso</Link>
                 </div>
             </div>
         </main>
