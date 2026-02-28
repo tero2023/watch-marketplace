@@ -3,7 +3,7 @@
 import { ChevronRight, Diamond, Clock, ShieldCheck, ShoppingBag, Menu, CheckCircle2 } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 import CartSidebar from "../components/CartSidebar";
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
@@ -47,7 +47,15 @@ export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.1,
+    };
+
     const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -58,17 +66,17 @@ export default function Home() {
       });
     };
 
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.15,
-    };
-
     const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const elements = document.querySelectorAll('.scroll-reveal');
-    elements.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
+    // Create a stable copy of current refs to avoid cleanup issues
+    const elements = revealRefs.current;
+    elements.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const featuredWatches = [
@@ -184,13 +192,21 @@ export default function Home() {
       </section>
 
       <section className="featured-section container">
-        <div className="section-header scroll-reveal">
+        <div
+          className="section-header scroll-reveal"
+          ref={(el) => { revealRefs.current[0] = el; }}
+        >
           <h2>Piezas Destacadas</h2>
           <a href="#" className="view-all">Ver Todas</a>
         </div>
         <div className="watch-grid">
           {featuredWatches.map((watch, index) => (
-            <div key={watch.id} className="watch-card scroll-reveal" style={{ transitionDelay: `${index * 0.15}s` }}>
+            <div
+              key={watch.id}
+              className="watch-card scroll-reveal"
+              style={{ transitionDelay: `${index * 0.15}s` }}
+              ref={(el) => { revealRefs.current[index + 1] = el; }}
+            >
               <div className="watch-image-container">
                 <div style={{ position: "absolute", top: "1rem", left: "1rem", zIndex: 10, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(5px)", padding: "0.3rem 0.8rem", border: "1px solid rgba(255,255,255,0.1)", color: "var(--foreground)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>{watch.tag}</div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
