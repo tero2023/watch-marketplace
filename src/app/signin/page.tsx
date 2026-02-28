@@ -25,7 +25,7 @@ export default function SignIn() {
         });
 
         if (res?.error) {
-            setError("Invalid credentials. Please verify your email and password.");
+            setError("Credenciales inválidas. Por favor verifique su correo electrónico y contraseña.");
             setLoading(false);
         } else {
             router.push("/");
@@ -40,8 +40,8 @@ export default function SignIn() {
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
                         <Diamond size={24} color="var(--accent-gold)" />
                     </div>
-                    <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>Sign In</h1>
-                    <p style={{ color: "#888", fontSize: "0.9rem" }}>Access your exclusive MICRON portfolio</p>
+                    <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>Iniciar Sesión</h1>
+                    <p style={{ color: "#888", fontSize: "0.9rem" }}>Acceda a su portafolio exclusivo MICRON</p>
                 </div>
 
                 {error && (
@@ -52,7 +52,7 @@ export default function SignIn() {
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                     <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Email</label>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Correo Electrónico</label>
                         <input
                             type="email"
                             value={email}
@@ -63,7 +63,7 @@ export default function SignIn() {
                     </div>
 
                     <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Password</label>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Contraseña</label>
                         <input
                             type="password"
                             value={password}
@@ -74,12 +74,12 @@ export default function SignIn() {
                     </div>
 
                     <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", marginTop: "1rem", opacity: loading ? 0.7 : 1 }}>
-                        {loading ? "Authenticating..." : "Sign In"}
+                        {loading ? "Autenticando..." : "Iniciar Sesión"}
                     </button>
                 </form>
 
                 <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", color: "#888" }}>
-                    Don't have an account? <Link href="/register" style={{ color: "var(--accent-gold)" }}>Apply for Access</Link>
+                    ¿Aún no tiene una cuenta? <Link href="/register" style={{ color: "var(--accent-gold)" }}>Solicitar Acceso</Link>
                 </div>
             </div>
         </main>

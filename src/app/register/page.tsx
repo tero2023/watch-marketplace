@@ -35,10 +35,10 @@ export default function Register() {
                 }, 2000);
             } else {
                 const data = await res.json();
-                setError(data.message || "An error occurred during registration");
+                setError(data.message || "Ocurrió un error en el registro");
             }
         } catch (err) {
-            setError("Failed to register. Please try again.");
+            setError("No se pudo registrar. Por favor intente de nuevo.");
         } finally {
             setLoading(false);
         }
@@ -49,8 +49,8 @@ export default function Register() {
             <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
                 <div style={{ textAlign: "center", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px", color: "var(--accent-gold)" }} className="fade-in">
                     <Diamond size={32} style={{ margin: "0 auto 1.5rem" }} />
-                    <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Application Approved</h2>
-                    <p style={{ color: "#fff" }}>Your portfolio has been created. Redirecting to sign in...</p>
+                    <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Solicitud Aprobada</h2>
+                    <p style={{ color: "#fff" }}>Su portafolio ha sido creado. Redirigiendo al inicio de sesión...</p>
                 </div>
             </main>
         );
@@ -60,8 +60,8 @@ export default function Register() {
         <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
             <div style={{ maxWidth: "450px", width: "100%", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px" }} className="slide-up">
                 <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-                    <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", fontFamily: "var(--font-serif)" }}>Apply for Access</h1>
-                    <p style={{ color: "#888", fontSize: "0.9rem" }}>Join the exclusive MICRON collector network</p>
+                    <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", fontFamily: "var(--font-serif)" }}>Solicitar Acceso</h1>
+                    <p style={{ color: "#888", fontSize: "0.9rem" }}>Únase a la exclusiva red de coleccionistas MICRON</p>
                 </div>
 
                 {error && (
@@ -72,7 +72,7 @@ export default function Register() {
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                     <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Full Name</label>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Nombre Completo</label>
                         <input
                             type="text"
                             value={name}
@@ -83,7 +83,7 @@ export default function Register() {
                     </div>
 
                     <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Email Address</label>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Correo Electrónico</label>
                         <input
                             type="email"
                             value={email}
@@ -94,7 +94,7 @@ export default function Register() {
                     </div>
 
                     <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Password</label>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Contraseña</label>
                         <input
                             type="password"
                             value={password}
@@ -106,12 +106,12 @@ export default function Register() {
                     </div>
 
                     <button type="submit" disabled={loading} className="btn-primary" style={{ width: "100%", marginTop: "1rem", opacity: loading ? 0.7 : 1 }}>
-                        {loading ? "Submitting..." : "Submit Application"}
+                        {loading ? "Enviando..." : "Enviar Solicitud"}
                     </button>
                 </form>
 
                 <div style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem", color: "#888" }}>
-                    Already a collector? <Link href="/signin" style={{ color: "var(--accent-gold)" }}>Sign In</Link>
+                    ¿Ya es coleccionista? <Link href="/signin" style={{ color: "var(--accent-gold)" }}>Iniciar Sesión</Link>
                 </div>
             </div>
         </main>

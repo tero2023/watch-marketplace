@@ -44,11 +44,11 @@ export default function CartSidebar() {
                 window.location.href = data.url; // Redirect to MercadoPago
             } else {
                 console.error("No checkout URL returned", data);
-                alert("Checkout configuration is missing credentials. Please set up your MercadoPago keys in the .env file.");
+                alert("Faltan las credenciales de configuración de pago. Configure sus claves de MercadoPago en el archivo .env.");
             }
         } catch (error) {
             console.error("Checkout error:", error);
-            alert("There was an error initializing checkout.");
+            alert("Hubo un error al inicializar el pago.");
         }
     };
 
@@ -66,7 +66,7 @@ export default function CartSidebar() {
                 <div style={{ padding: '2rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <ShoppingBag color="var(--accent-gold)" />
-                        <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-serif)', letterSpacing: '0.05em' }}>Your Acquisition File</h2>
+                        <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-serif)', letterSpacing: '0.05em' }}>Su Archivo de Adquisición</h2>
                     </div>
                     <button onClick={toggleCart} style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', padding: '0.5rem' }}>
                         <X size={24} />
@@ -76,8 +76,8 @@ export default function CartSidebar() {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     {items.length === 0 ? (
                         <div style={{ textAlign: 'center', color: '#666', marginTop: '4rem', fontFamily: 'var(--font-sans)' }}>
-                            <p>Your acquisition file is currently empty.</p>
-                            <button onClick={toggleCart} className="btn-outline" style={{ marginTop: '2rem' }}>Explore Collection</button>
+                            <p>Su archivo de adquisición está actualmente vacío.</p>
+                            <button onClick={toggleCart} className="btn-outline" style={{ marginTop: '2rem' }}>Explorar Colección</button>
                         </div>
                     ) : (
                         items.map((item) => (
@@ -89,7 +89,7 @@ export default function CartSidebar() {
                                     <p style={{ color: 'var(--accent-gold)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{item.brand}</p>
                                     <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>{item.model}</p>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                                        <p style={{ color: '#aaa', fontSize: '0.9rem' }}>Qty: {item.quantity}</p>
+                                        <p style={{ color: '#aaa', fontSize: '0.9rem' }}>Cant: {item.quantity}</p>
                                         <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 300, fontSize: '1rem' }}>{formatPrice(item.price)}</p>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@ export default function CartSidebar() {
                             <span style={{ fontSize: '1.25rem', fontWeight: 300 }}>{formatPrice(total)}</span>
                         </div>
                         <p style={{ fontSize: '0.75rem', color: '#666', marginBottom: '1.5rem', textAlign: 'center' }}>
-                            Shipping and secure delivery insurance calculated at checkout.
+                            El envío y el seguro de entrega se calcularán al pagar.
                         </p>
                         <button
                             className="btn-primary"
@@ -119,7 +119,7 @@ export default function CartSidebar() {
                             onClick={handleCheckout}
                         >
                             {!session && <Lock size={16} />}
-                            {session ? "Secure Checkout via MercadoPago" : "Sign in to Secure Checkout"}
+                            {session ? "Pago Seguro vía MercadoPago" : "Iniciar Sesión para Pago Seguro"}
                         </button>
                     </div>
                 )}

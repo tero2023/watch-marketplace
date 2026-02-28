@@ -36,7 +36,7 @@ function OrderStatusBanner() {
         .navbar { margin-top: 50px !important; }
       `}</style>
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, background: "#1a472a", color: "white", padding: "1rem", zIndex: 1000, display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
-        <CheckCircle2 size={18} color="var(--accent-gold)" /> Your acquisition was successful. The concierge will contact you shortly regarding delivery.
+        <CheckCircle2 size={18} color="var(--accent-gold)" /> Su adquisición fue exitosa. Nuestro conserje se comunicará con usted en breve sobre la entrega.
       </div>
     </>
   );
@@ -54,7 +54,7 @@ export default function Home() {
       model: "Nautilus",
       price: "$125,000",
       image: "https://images.unsplash.com/photo-1548171915-e76a6a165b6d?q=80&w=800&auto=format&fit=crop",
-      tag: "Rare Find"
+      tag: "Hallazgo Raro"
     },
     {
       id: 2,
@@ -62,7 +62,7 @@ export default function Home() {
       model: "Royal Oak Openworked",
       price: "$95,000",
       image: "https://images.unsplash.com/photo-1549972574-8e3e1ed6a215?q=80&w=800&auto=format&fit=crop",
-      tag: "Boutique Exclusive"
+      tag: "Exclusivo Boutique"
     },
     {
       id: 3,
@@ -70,7 +70,7 @@ export default function Home() {
       model: "Cosmograph Daytona",
       price: "$45,000",
       image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=800&auto=format&fit=crop",
-      tag: "Iconic"
+      tag: "Icónico"
     }
   ];
 
@@ -96,19 +96,19 @@ export default function Home() {
             <span className="brand-text">MICRON</span>
           </div>
           <div className="nav-links">
-            <a href="#">Collections</a>
-            <a href="#">Brands</a>
-            <a href="#">Concierge</a>
-            <a href="#">About</a>
+            <a href="#">Colecciones</a>
+            <a href="#">Marcas</a>
+            <a href="#">Servicios</a>
+            <a href="#">Nosotros</a>
           </div>
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             {session ? (
               <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Welcome, <strong style={{ color: "var(--accent-gold)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Collector"}</strong></span>
-                <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Log Out</button>
+                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Bienvenido, <strong style={{ color: "var(--accent-gold)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
+                <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Cerrar Sesión</button>
               </div>
             ) : (
-              <button className="btn-outline" onClick={() => router.push("/signin")} style={{ padding: "0.5rem 1.5rem" }}>Sign In</button>
+              <button className="btn-outline" onClick={() => router.push("/signin")} style={{ padding: "0.5rem 1.5rem" }}>Iniciar Sesión</button>
             )}
             <div style={{ position: "relative", cursor: "pointer" }} onClick={toggleCart}>
               <ShoppingBag style={{ opacity: 0.8 }} />
@@ -131,28 +131,28 @@ export default function Home() {
       <section className="hero">
         <div className="hero-content container slide-up">
           <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem", color: "var(--accent-gold)", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "0.8rem", padding: "0.5rem 1rem", border: "1px solid var(--border-color)", borderRadius: "20px", background: "rgba(212, 175, 55, 0.05)" }}>
-            <Diamond size={14} /> Only Authentic Pieces
+            <Diamond size={14} /> Solo Piezas Auténticas
           </div>
-          <h1>Timeless Elegance, <br /> Redefined.</h1>
-          <p>Discover our curated collection of the world's most exquisite luxury watches. Handpicked for the discerning collector.</p>
+          <h1>Elegancia Atemporal, <br /> Redefinida.</h1>
+          <p>Descubra nuestra colección curada de los relojes de lujo más exquisitos del mundo. Seleccionados a mano para el coleccionista más exigente.</p>
           <div className="hero-actions">
-            <button className="btn-primary">Explore Collection <ChevronRight size={18} style={{ marginLeft: "0.5rem" }} /></button>
-            <button className="btn-outline">View Brands</button>
+            <button className="btn-primary">Explorar Colección <ChevronRight size={18} style={{ marginLeft: "0.5rem" }} /></button>
+            <button className="btn-outline">Ver Marcas</button>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center", gap: "4rem", marginTop: "5rem", opacity: 0.7 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <ShieldCheck size={24} color="var(--accent-gold)" />
               <div style={{ textAlign: "left" }}>
-                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Guaranteed</div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>100% Authentic</div>
+                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Garantía</div>
+                <div style={{ fontSize: "0.8rem", color: "#888" }}>100% Auténtico</div>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <Clock size={24} color="var(--accent-gold)" />
               <div style={{ textAlign: "left" }}>
-                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Insured Shipping</div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>Worldwide Delivery</div>
+                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Envío Asegurado</div>
+                <div style={{ fontSize: "0.8rem", color: "#888" }}>Entrega Mundial</div>
               </div>
             </div>
           </div>
@@ -161,8 +161,8 @@ export default function Home() {
 
       <section className="featured-section container slide-up" style={{ animationDelay: '0.2s' }}>
         <div className="section-header">
-          <h2>Featured Timepieces</h2>
-          <a href="#" className="view-all">View All</a>
+          <h2>Piezas Destacadas</h2>
+          <a href="#" className="view-all">Ver Todas</a>
         </div>
         <div className="watch-grid">
           {featuredWatches.map((watch) => (
@@ -181,7 +181,7 @@ export default function Home() {
                     className="btn-buy"
                     onClick={() => addItem(watch, watch.price)}
                   >
-                    Acquire
+                    Adquirir
                   </button>
                 </div>
               </div>
@@ -203,41 +203,40 @@ export default function Home() {
               </div>
               <span className="brand-text">MICRON</span>
             </div>
-            <p>Elevating the standard of luxury watch acquisition. Operating exclusively with verified collectors worldwide.</p>
+            <p>Elevando el estándar en la adquisición de relojes de lujo. Operando exclusivamente con coleccionistas verificados en todo el mundo.</p>
           </div>
           <div className="footer-links">
             <div>
-              <h4>Collections</h4>
+              <h4>Colecciones</h4>
               <ul>
-                <li><a href="#">New Arrivals</a></li>
-                <li><a href="#">Vintage Masterpieces</a></li>
-                <li><a href="#">Limited Editions</a></li>
-                <li><a href="#">Complications</a></li>
+                <li><a href="#">Recién Llegados</a></li>
+                <li><a href="#">Obras Maestras Vintage</a></li>
+                <li><a href="#">Ediciones Limitadas</a></li>
+                <li><a href="#">Complicaciones</a></li>
               </ul>
             </div>
             <div>
-              <h4>Support</h4>
+              <h4>Soporte</h4>
               <ul>
-                <li><a href="mailto:thomas.muhm@gmail.com">Contact Us</a></li>
-                <li><a href="#">Shipping & Returns</a></li>
-                <li><a href="#">Authenticity Guarantee</a></li>
-                <li><a href="#">FAQ</a></li>
+                <li><a href="mailto:thomas.muhm@gmail.com">Contáctenos</a></li>
+                <li><a href="#">Envíos y Devoluciones</a></li>
+                <li><a href="#">Garantía de Autenticidad</a></li>
+                <li><a href="#">Preguntas Frecuentes</a></li>
               </ul>
             </div>
             <div>
               <h4>Legal</h4>
               <ul>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Términos de Servicio</a></li>
+                <li><a href="#">Política de Privacidad</a></li>
               </ul>
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 MICRON Timepieces Limited. All rights reserved.</p>
+          <p>&copy; 2026 MICRON Timepieces Limited. Todos los derechos reservados.</p>
         </div>
       </footer>
     </main>
   );
 }
-

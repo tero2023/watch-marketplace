@@ -13,8 +13,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "MICRON | Premium Watch Marketplace",
-  description: "Discover and acquire the world's most exquisite luxury watches.",
+  title: "MICRON | Mercado de Relojes Premium",
+  description: "Descubra y adquiera los relojes de lujo más exquisitos del mundo.",
 };
 
 import { Providers } from "@/components/Providers";
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${inter.variable} ${playfair.variable}`}>
         <Providers>
           {children}
