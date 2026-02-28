@@ -590,6 +590,7 @@ h6 {
   letter-spacing: 0.05em;
   color: var(--foreground);
   text-transform: uppercase;
+  width: 140px;
 }
 
 .logo-icon {
@@ -698,7 +699,7 @@ h6 {
     filter: blur(0px);
   }
 
-  65%,
+  80%,
   100% {
     opacity: 0;
     transform: scale(0.6);
@@ -715,7 +716,7 @@ h6 {
     filter: blur(4px);
   }
 
-  65%,
+  80%,
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
@@ -734,7 +735,7 @@ h6 {
     letter-spacing: -5px;
   }
 
-  65%,
+  80%,
   100% {
     opacity: 1;
     transform: translateX(0);
