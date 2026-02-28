@@ -48,11 +48,12 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const observerCallback: IntersectionObserverCallback = (entries, observer) => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+        } else {
+          entry.target.classList.remove('visible');
         }
       });
     };
