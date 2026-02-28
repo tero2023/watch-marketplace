@@ -201,7 +201,7 @@ export default function Home() {
                 </div>
                 <span className="mu-symbol">&mu;</span>
               </div>
-              <span className="brand-text">MICRON</span>
+              <span className="brand-text-footer">MICRON</span>
             </div>
             <p>Elevando el estándar en la adquisición de relojes de lujo. Operando exclusivamente con coleccionistas verificados en todo el mundo.</p>
           </div>

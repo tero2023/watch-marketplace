@@ -698,6 +698,10 @@ h6 {
   animation: slideInText 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate;
 }
 
+.brand-text-footer {
+  animation: slideInTextFooter 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate;
+}
+
 @keyframes spinMinute {
   0% {
     transform: rotate(0deg);
@@ -777,6 +781,27 @@ h6 {
     transform: translateX(0);
     filter: blur(0px);
     color: var(--foreground);
+    letter-spacing: 0.05em;
+  }
+}
+
+@keyframes slideInTextFooter {
+
+  0%,
+  45% {
+    opacity: 0;
+    transform: translateX(-40px);
+    filter: blur(8px);
+    color: #444;
+    letter-spacing: -5px;
+  }
+
+  80%,
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0px);
+    color: var(--accent-silver);
     letter-spacing: 0.05em;
   }
 }
