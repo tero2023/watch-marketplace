@@ -183,8 +183,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="featured-section container slide-up" style={{ animationDelay: '0.2s' }}>
-        <div className="section-header">
+      <section className="featured-section container">
+        <div className="section-header scroll-reveal">
           <h2>Piezas Destacadas</h2>
           <a href="#" className="view-all">Ver Todas</a>
         </div>
