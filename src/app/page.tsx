@@ -1,6 +1,49 @@
-import { ChevronRight, Diamond, Clock, ShieldCheck, ShoppingBag, Menu } from "lucide-react";
+"use client";
+
+import { ChevronRight, Diamond, Clock, ShieldCheck, ShoppingBag, Menu, CheckCircle2 } from "lucide-react";
+import { useCartStore } from "../store/cartStore";
+import CartSidebar from "../components/CartSidebar";
+import React, { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
+function OrderStatusBanner() {
+  const { clearCart } = useCartStore();
+  const searchParams = useSearchParams();
+  const [orderStatus, setOrderStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    if (status) {
+      setOrderStatus(status);
+      if (status === "success") {
+        clearCart();
+      }
+
+      // Clear URL parameter so it doesn't stay there indefinitely
+      window.history.replaceState(null, '', window.location.pathname);
+
+      // Auto-hide the banner after 5 seconds
+      setTimeout(() => setOrderStatus(null), 5000);
+    }
+  }, [searchParams, clearCart]);
+
+  if (orderStatus !== "success") return null;
+
+  return (
+    <>
+      <style>{`
+        .navbar { margin-top: 50px !important; }
+      `}</style>
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, background: "#1a472a", color: "white", padding: "1rem", zIndex: 1000, display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
+        <CheckCircle2 size={18} color="var(--accent-gold)" /> Your acquisition was successful. The concierge will contact you shortly regarding delivery.
+      </div>
+    </>
+  );
+}
 
 export default function Home() {
+  const { addItem, toggleCart, getItemCount } = useCartStore();
+
   const featuredWatches = [
     {
       id: 1,
@@ -28,8 +71,15 @@ export default function Home() {
     }
   ];
 
+  const itemCount = getItemCount();
+
   return (
     <main>
+      <CartSidebar />
+      <Suspense fallback={null}>
+        <OrderStatusBanner />
+      </Suspense>
+
       <nav className="navbar fade-in">
         <div className="container nav-container">
           <div className="logo"><span style={{ color: "var(--accent-gold)", fontWeight: 300, marginRight: "0.2rem" }}>&mu;</span>MICRON</div>
@@ -41,7 +91,19 @@ export default function Home() {
           </div>
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             <button className="btn-outline" style={{ padding: "0.5rem 1.5rem", display: "none" }}>Sign In</button>
-            <ShoppingBag style={{ cursor: "pointer", opacity: 0.8 }} />
+            <div style={{ position: "relative", cursor: "pointer" }} onClick={toggleCart}>
+              <ShoppingBag style={{ opacity: 0.8 }} />
+              {itemCount > 0 && (
+                <span style={{
+                  position: "absolute", top: "-8px", right: "-8px",
+                  backgroundColor: "var(--accent-gold)", color: "#000",
+                  fontSize: "0.65rem", fontWeight: "bold", width: "18px", height: "18px",
+                  borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  {itemCount}
+                </span>
+              )}
+            </div>
             <Menu style={{ cursor: "pointer", display: "none" }} className="mobile-menu" />
           </div>
         </div>
@@ -96,7 +158,12 @@ export default function Home() {
                 <p className="watch-model">{watch.model}</p>
                 <div className="watch-footer">
                   <span className="watch-price">{watch.price}</span>
-                  <button className="btn-buy">Acquire</button>
+                  <button
+                    className="btn-buy"
+                    onClick={() => addItem(watch, watch.price)}
+                  >
+                    Acquire
+                  </button>
                 </div>
               </div>
             </div>
