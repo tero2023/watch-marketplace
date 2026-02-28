@@ -208,7 +208,7 @@ export default function Home() {
               ref={(el) => { revealRefs.current[index + 1] = el; }}
             >
               <div className="watch-image-container">
-                <div style={{ position: "absolute", top: "1rem", left: "1rem", zIndex: 10, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(5px)", padding: "0.3rem 0.8rem", border: "1px solid rgba(255,255,255,0.1)", color: "var(--foreground)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>{watch.tag}</div>
+
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={watch.image} alt={`${watch.brand} ${watch.model}`} className="watch-image" />
               </div>
