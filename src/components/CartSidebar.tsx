@@ -1,10 +1,14 @@
 "use client";
 
-import { X, ShoppingBag, Trash2 } from "lucide-react";
+import { X, ShoppingBag, Trash2, Lock } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CartSidebar() {
     const { items, isOpen, toggleCart, removeItem, getCartTotal } = useCartStore();
+    const { data: session } = useSession();
+    const router = useRouter();
 
     if (!isOpen) return null;
 
@@ -18,6 +22,12 @@ export default function CartSidebar() {
     };
 
     const handleCheckout = async () => {
+        if (!session) {
+            router.push("/signin");
+            toggleCart();
+            return;
+        }
+
         try {
             // We will implement this API route next
             const response = await fetch('/api/checkout', {
@@ -105,10 +115,11 @@ export default function CartSidebar() {
                         </p>
                         <button
                             className="btn-primary"
-                            style={{ width: '100%', padding: '1rem' }}
+                            style={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
                             onClick={handleCheckout}
                         >
-                            Secure Checkout via MercadoPago
+                            {!session && <Lock size={16} />}
+                            {session ? "Secure Checkout via MercadoPago" : "Sign in to Secure Checkout"}
                         </button>
                     </div>
                 )}

@@ -4,7 +4,8 @@ import { ChevronRight, Diamond, Clock, ShieldCheck, ShoppingBag, Menu, CheckCirc
 import { useCartStore } from "../store/cartStore";
 import CartSidebar from "../components/CartSidebar";
 import React, { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 function OrderStatusBanner() {
   const { clearCart } = useCartStore();
@@ -43,6 +44,8 @@ function OrderStatusBanner() {
 
 export default function Home() {
   const { addItem, toggleCart, getItemCount } = useCartStore();
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const featuredWatches = [
     {
@@ -99,7 +102,11 @@ export default function Home() {
             <a href="#">About</a>
           </div>
           <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-            <button className="btn-outline" style={{ padding: "0.5rem 1.5rem", display: "none" }}>Sign In</button>
+            {session ? (
+              <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Log Out</button>
+            ) : (
+              <button className="btn-outline" onClick={() => router.push("/signin")} style={{ padding: "0.5rem 1.5rem" }}>Sign In</button>
+            )}
             <div style={{ position: "relative", cursor: "pointer" }} onClick={toggleCart}>
               <ShoppingBag style={{ opacity: 0.8 }} />
               {itemCount > 0 && (

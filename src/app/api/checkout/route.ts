@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 // Initialize the client with the access token
 const client = new MercadoPagoConfig({
@@ -8,6 +10,11 @@ const client = new MercadoPagoConfig({
 
 export async function POST(request: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized. You must be signed in to purchase.' }, { status: 401 });
+        }
+
         const body = await request.json();
         const { items } = body;
 
