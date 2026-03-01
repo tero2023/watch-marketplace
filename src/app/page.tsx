@@ -82,11 +82,11 @@ export default function Home() {
   const featuredWatches = [
     {
       id: 1,
-      brand: "Patek Philippe",
-      model: "Nautilus",
-      price: "$125,000",
-      image: "/images/patek.png",
-      tag: "Hallazgo Raro"
+      brand: "Seiko",
+      model: 'Presage "Cocktail Time"',
+      price: "$595",
+      image: "/images/seiko.png",
+      tag: "Artesanal"
     },
     {
       id: 2,
