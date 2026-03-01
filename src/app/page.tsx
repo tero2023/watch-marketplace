@@ -85,7 +85,7 @@ export default function Home() {
       brand: "Patek Philippe",
       model: "Nautilus",
       price: "$125,000",
-      image: "https://images.unsplash.com/photo-1548171915-e76a6a165b6d?q=80&w=800&auto=format&fit=crop",
+      image: "/images/patek.png",
       tag: "Hallazgo Raro"
     },
     {
@@ -93,7 +93,7 @@ export default function Home() {
       brand: "Audemars Piguet",
       model: "Royal Oak Openworked",
       price: "$95,000",
-      image: "https://images.unsplash.com/photo-1549972574-8e3e1ed6a215?q=80&w=800&auto=format&fit=crop",
+      image: "/images/audemars.png",
       tag: "Exclusivo Boutique"
     },
     {
