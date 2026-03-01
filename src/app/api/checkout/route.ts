@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
+import { prisma } from "../../../lib/prisma";
 
 // Initialize the client with the access token
 const client = new MercadoPagoConfig({
@@ -20,6 +21,27 @@ export async function POST(request: Request) {
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
+        }
+
+        // Optimistically deduct stock from database
+        for (const item of items) {
+            // Find watch by ID
+            // Depending on how items are stored, we assume item.id corresponds to database ID
+            try {
+                // Determine if item matches string ID (cuid). We seeded with numeric IDs initially? Wait, 1, 2, 3 as strings
+                const watchId = String(item.id);
+
+                await prisma.watch.update({
+                    where: { id: watchId },
+                    data: {
+                        stock: {
+                            decrement: item.quantity || 1
+                        }
+                    }
+                });
+            } catch (err) {
+                console.warn(`Could not decrease stock for item ${item.id}`, err);
+            }
         }
 
         // Format items for Mercado Pago Preference
@@ -41,9 +63,9 @@ export async function POST(request: Request) {
             body: {
                 items: preferenceItems,
                 back_urls: {
-                    success: 'http://localhost:3000?status=success',
-                    failure: 'http://localhost:3000?status=failure',
-                    pending: 'http://localhost:3000?status=pending',
+                    success: `${new URL(request.url).origin}?status=success`,
+                    failure: `${new URL(request.url).origin}?status=failure`,
+                    pending: `${new URL(request.url).origin}?status=pending`,
                 },
                 auto_return: 'approved',
                 // External reference can be an internal order ID

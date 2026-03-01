@@ -79,33 +79,20 @@ export default function Home() {
     };
   }, []);
 
-  const featuredWatches = [
-    {
-      id: 1,
-      brand: "Seiko",
-      model: 'Presage "Cocktail Time"',
-      price: "$595",
-      image: "/images/seiko.png",
-      tag: "Artesanal"
-    },
-    {
-      id: 2,
-      brand: "Seiko",
-      model: "Prospex PADI Diver",
-      price: "$650",
-      image: "/images/seiko_prospex_original.jpg",
-      tag: "Edición Especial"
-    },
-    {
-      id: 3,
-      brand: "Rolex",
-      model: "Cosmograph Daytona",
-      price: "$45,000",
-      image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=800&auto=format&fit=crop",
-      tag: "Icónico"
-    }
-  ];
+  const [featuredWatches, setFeaturedWatches] = useState<any[]>([]);
 
+  useEffect(() => {
+    async function loadWatches() {
+      try {
+        const res = await fetch('/api/watches');
+        const data = await res.json();
+        setFeaturedWatches(data);
+      } catch (err) {
+        console.error("Error loading watches:", err);
+      }
+    }
+    loadWatches();
+  }, []);
   const itemCount = getItemCount();
 
   return (
@@ -203,12 +190,16 @@ export default function Home() {
           {featuredWatches.map((watch, index) => (
             <div
               key={watch.id}
-              className="watch-card scroll-reveal"
-              style={{ transitionDelay: `${index * 0.15}s` }}
+              className={`watch-card scroll-reveal ${watch.stock <= 0 ? 'sold-out' : ''}`}
+              style={{ transitionDelay: `${index * 0.15}s`, opacity: watch.stock <= 0 ? 0.6 : 1 }}
               ref={(el) => { revealRefs.current[index + 1] = el; }}
             >
               <div className="watch-image-container">
-
+                {watch.stock <= 0 && (
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'var(--accent-red)', color: 'white', padding: '0.4rem 0.8rem', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.1em', zIndex: 10, borderRadius: '4px' }}>
+                    AGOTADO
+                  </div>
+                )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={watch.image} alt={`${watch.brand} ${watch.model}`} className="watch-image" />
               </div>
@@ -220,6 +211,8 @@ export default function Home() {
                   <button
                     className="btn-buy"
                     onClick={() => addItem(watch, watch.price)}
+                    disabled={watch.stock <= 0}
+                    style={{ opacity: watch.stock <= 0 ? 0.5 : 1, cursor: watch.stock <= 0 ? 'not-allowed' : 'pointer' }}
                   >
                     Adquirir
                   </button>
