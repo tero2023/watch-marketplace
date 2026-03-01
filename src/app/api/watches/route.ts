@@ -26,7 +26,7 @@ export async function GET() {
                     model: "Prospex PADI Diver",
                     price: "$650",
                     priceValue: 650,
-                    image: "/images/seiko_prospex_original.jpg",
+                    image: "/images/seiko_prospex_bg.png",
                     tag: "Edición Especial",
                     stock: 1
                 },
@@ -36,7 +36,7 @@ export async function GET() {
                     model: "Stealth Diver Custom",
                     price: "$750",
                     priceValue: 750,
-                    image: "/images/seiko_stealth.jpg",
+                    image: "/images/seiko_stealth_bg.png",
                     tag: "Único",
                     stock: 1
                 }
@@ -59,13 +59,31 @@ export async function GET() {
                     model: "Stealth Diver Custom",
                     price: "$750",
                     priceValue: 750,
-                    image: "/images/seiko_stealth.jpg",
+                    image: "/images/seiko_stealth_bg.png",
                     tag: "Único",
                     stock: 1
                 }
             });
             watches = await prisma.watch.findMany();
         }
+
+        // Forcibly update existing DB entries to use the unified backgrounds if they are still on old extensions
+        for (const w of watches) {
+            if (w.image.includes('seiko_prospex_original.jpg')) {
+                await prisma.watch.update({
+                    where: { id: w.id },
+                    data: { image: "/images/seiko_prospex_bg.png", tag: "Edición Especial" }
+                });
+            }
+            if (w.image.includes('seiko_stealth.jpg')) {
+                await prisma.watch.update({
+                    where: { id: w.id },
+                    data: { image: "/images/seiko_stealth_bg.png", tag: "Único" }
+                });
+            }
+        }
+
+        watches = await prisma.watch.findMany();
 
         return NextResponse.json(watches);
     } catch (error) {
