@@ -114,12 +114,31 @@ export default function CartSidebar() {
                             El envío y el seguro de entrega se calcularán al pagar.
                         </p>
                         <button
-                            className="btn-primary"
-                            style={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
+                            style={{
+                                width: '100%',
+                                padding: '1rem',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                backgroundColor: '#009ee3', // MercadoPago Official Blue
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontWeight: 500,
+                                fontSize: '1rem',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s ease',
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#008bca'}
+                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#009ee3'}
                             onClick={handleCheckout}
                         >
                             {!session && <Lock size={16} />}
-                            {session ? "Pago Seguro vía MercadoPago" : "Iniciar Sesión para Pago Seguro"}
+                            {session ? "Pagar con" : "Iniciar Sesión para Pagar con"}
+                            <span style={{ fontWeight: 800, letterSpacing: '-0.5px', marginLeft: '4px' }}>mercado</span>
+                            <span style={{ fontWeight: 400, letterSpacing: '-0.5px' }}>pago</span>
                         </button>
                     </div>
                 )}
