@@ -48,6 +48,31 @@ export default function Home() {
   const router = useRouter();
 
   const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const showcaseRef = useRef<HTMLElement>(null);
+  const [showcaseWidth, setShowcaseWidth] = useState(66.66);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showcaseRef.current) {
+        const rect = showcaseRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Start 2/3 width, ends full width as you scroll past it
+        let percentage = 66.66;
+        if (rect.top < windowHeight) {
+          // when top of element enters viewport, start scaling
+          const scrollProgress = (windowHeight - rect.top) / windowHeight;
+          // scale up to 100 fast (by multiplying progress by 1.8)
+          percentage = Math.min(100, Math.max(66.66, 66.66 + (33.34 * (scrollProgress * 1.8))));
+        }
+        setShowcaseWidth(percentage);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -178,14 +203,19 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="underwater-showcase">
+      <section
+        className="underwater-showcase"
+        ref={showcaseRef}
+        style={{
+          width: showcaseWidth === 100 ? '100vw' : `${showcaseWidth}vw`,
+          margin: showcaseWidth === 100 ? '5rem 0 -5rem 0' : '5rem auto -5rem auto',
+          borderRadius: showcaseWidth === 100 ? '0' : '24px',
+          boxShadow: showcaseWidth === 100 ? 'none' : '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          transition: 'width 0.1s linear, border-radius 0.1s linear, margin 0.1s linear'
+        }}
+      >
         <div className="underwater-watch-image fade-in" style={{ animationDelay: "0.2s" }} />
         <div className="underwater-overlay" />
-        <div className="underwater-content container fade-in" style={{ animationDelay: "1s" }}>
-          <span className="underwater-badge">Inmersión Submarina</span>
-          <h2>Dominio de las Profundidades</h2>
-          <p>Experimente la extrema precisión de la ingeniería mecánica. Una inmersión total por el contorno del bisel, la caja y la válvula de escape subacuática.</p>
-        </div>
       </section>
 
       <section className="featured-section container">
