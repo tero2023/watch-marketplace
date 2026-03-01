@@ -1,18 +1,32 @@
 import nodemailer from "nodemailer";
 
 export async function sendVerificationEmail(email: string, token: string) {
-    // Para entornos de desarrollo (crea una cuenta de prueba gratuita en Ethereal Email)
-    const testAccount = await nodemailer.createTestAccount();
+    let transporter;
 
-    const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true para 465, false para otros puertos
-        auth: {
-            user: testAccount.user, // usuario generado por ethereal
-            pass: testAccount.pass, // contraseña generada por ethereal
-        },
-    });
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+        // Usa credenciales reales de correo (Gmail, SendGrid, etc.)
+        transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            secure: Number(process.env.SMTP_PORT) === 465, // true para port 465, false para otros (587)
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+        });
+    } else {
+        // Para entornos de desarrollo sin credenciales reales (cuenta de prueba en Ethereal)
+        const testAccount = await nodemailer.createTestAccount();
+        transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+    }
 
     const verifyUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/verify?token=${token}`;
 
@@ -39,5 +53,9 @@ export async function sendVerificationEmail(email: string, token: string) {
     });
 
     console.log("Mensaje enviado: %s", info.messageId);
-    console.log("Enlace de vista previa de correo (Ethereal): %s", nodemailer.getTestMessageUrl(info));
+
+    // Solo muestra la URL de prueba de ethereal si se usó ethereal
+    if (!process.env.SMTP_HOST) {
+        console.log("Enlace de vista previa de correo (Ethereal): %s", nodemailer.getTestMessageUrl(info));
+    }
 }
