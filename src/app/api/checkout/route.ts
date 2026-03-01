@@ -55,6 +55,9 @@ export async function POST(request: Request) {
                     }
                 });
 
+                // Fixed Exchange Rate (You can connect this to a live API or DB variable later)
+                const EXCHANGE_RATE_USD_TO_UYU = 40;
+
                 // Build MP item with 100% server-side authoritative pricing
                 preferenceItems.push({
                     id: dbWatch.id,
@@ -64,7 +67,7 @@ export async function POST(request: Request) {
                     category_id: 'watches',
                     quantity: requestedQuantity,
                     currency_id: 'UYU',
-                    unit_price: Number(dbWatch.priceValue) || 0, // SECURE: Uses DB price, ignoring client's payload price
+                    unit_price: (Number(dbWatch.priceValue) || 0) * EXCHANGE_RATE_USD_TO_UYU, // SECURE: Uses DB price, converted USD to UYU
                 });
             } catch (err) {
                 console.warn(`Error processing item ${item.id} for checkout:`, err);
