@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET || (() => { throw new Error("NEXTAUTH_SECRET is not set in environment"); })(),
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/signin",
     }
