@@ -32,12 +32,12 @@ export async function GET() {
                 },
                 {
                     id: "3",
-                    brand: "Rolex",
-                    model: "Cosmograph Daytona",
-                    price: "$45,000",
-                    priceValue: 45000,
-                    image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=800&auto=format&fit=crop",
-                    tag: "Icónico",
+                    brand: "Seiko Mod",
+                    model: "Stealth Diver Custom",
+                    price: "$750",
+                    priceValue: 750,
+                    image: "/images/seiko_stealth.jpg",
+                    tag: "Único",
                     stock: 1
                 }
             ];
@@ -46,6 +46,24 @@ export async function GET() {
                 data: initialWatches
             });
 
+            watches = await prisma.watch.findMany();
+        }
+
+        // Migrate live production DB from Rolex to Seiko Stealth if necessary
+        const thirdWatch = watches.find((w: any) => w.id === "3");
+        if (thirdWatch && thirdWatch.brand === "Rolex") {
+            await prisma.watch.update({
+                where: { id: "3" },
+                data: {
+                    brand: "Seiko Mod",
+                    model: "Stealth Diver Custom",
+                    price: "$750",
+                    priceValue: 750,
+                    image: "/images/seiko_stealth.jpg",
+                    tag: "Único",
+                    stock: 1
+                }
+            });
             watches = await prisma.watch.findMany();
         }
 
