@@ -93,7 +93,7 @@ export default function Home() {
       brand: "Seiko",
       model: "Prospex PADI Diver",
       price: "$650",
-      image: "/images/seiko_prospex_striped.png",
+      image: "/images/seiko_prospex_original.jpg",
       tag: "Edición Especial"
     },
     {
