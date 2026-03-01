@@ -2,19 +2,20 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartItem {
-    id: number;
+    id: string | number;
     brand: string;
     model: string;
     price: number;
     image: string;
     quantity: number;
+    stock?: number;
 }
 
 interface CartState {
     items: CartItem[];
     isOpen: boolean;
     addItem: (item: Omit<CartItem, 'quantity' | 'price'>, rawPriceStr: string) => void;
-    removeItem: (id: number) => void;
+    removeItem: (id: string | number) => void;
     clearCart: () => void;
     toggleCart: () => void;
     getCartTotal: () => number;
@@ -35,6 +36,11 @@ export const useCartStore = create<CartState>()(
                     const existingItem = state.items.find((i) => i.id === item.id);
 
                     if (existingItem) {
+                        if (item.stock !== undefined && existingItem.quantity >= item.stock) {
+                            alert(`No puede agregar más de esta pieza. Hay ${item.stock} en stock máximo.`);
+                            return { isOpen: true }; // Just open the cart to show existing elements
+                        }
+
                         return {
                             items: state.items.map((i) =>
                                 i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
