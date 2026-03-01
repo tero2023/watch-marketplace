@@ -85,7 +85,7 @@ export default function Home() {
       brand: "Seiko",
       model: 'Presage "Cocktail Time"',
       price: "$595",
-      image: "/images/seiko_original.jpg",
+      image: "/images/seiko.png",
       tag: "Artesanal"
     },
     {
