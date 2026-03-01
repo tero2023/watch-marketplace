@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         // Provide the generated checkout URL to the frontend
         return NextResponse.json({
             id: result.id,
-            url: result.sandbox_init_point
+            url: result.init_point
         });
 
     } catch (error) {
