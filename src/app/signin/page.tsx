@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Diamond } from "lucide-react";
 
-export default function SignIn() {
+function SignInForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const verified = searchParams.get("verified");
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -25,7 +28,11 @@ export default function SignIn() {
         });
 
         if (res?.error) {
-            setError("Credenciales inválidas. Por favor verifique su correo electrónico y contraseña.");
+            if (res.error === "unverified") {
+                setError("Por favor verifique su correo electrónico antes de iniciar sesión. Busque el enlace en su bandeja de entrada.");
+            } else {
+                setError("Credenciales inválidas. Por favor verifique su correo electrónico y contraseña.");
+            }
             setLoading(false);
         } else {
             router.push("/");
@@ -43,6 +50,12 @@ export default function SignIn() {
                     <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>Iniciar Sesión</h1>
                     <p style={{ color: "#888", fontSize: "0.9rem" }}>Acceda a su portafolio exclusivo MICRON</p>
                 </div>
+
+                {verified && !error && (
+                    <div style={{ background: "rgba(0, 255, 0, 0.1)", border: "1px solid rgba(0, 255, 0, 0.3)", color: "#4cd137", padding: "0.8rem", borderRadius: "5px", marginBottom: "1.5rem", fontSize: "0.85rem", textAlign: "center" }}>
+                        Su cuenta ha sido verificada exitosamente. Ahora puede iniciar sesión.
+                    </div>
+                )}
 
                 {error && (
                     <div style={{ background: "rgba(255, 0, 0, 0.1)", border: "1px solid rgba(255, 0, 0, 0.3)", color: "#ff6b6b", padding: "0.8rem", borderRadius: "5px", marginBottom: "1.5rem", fontSize: "0.85rem", textAlign: "center" }}>
@@ -83,5 +96,13 @@ export default function SignIn() {
                 </div>
             </div>
         </main>
+    );
+}
+
+export default function SignIn() {
+    return (
+        <Suspense fallback={null}>
+            <SignInForm />
+        </Suspense>
     );
 }

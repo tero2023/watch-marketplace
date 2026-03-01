@@ -10,6 +10,7 @@ export default function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -18,6 +19,12 @@ export default function Register() {
         e.preventDefault();
         setLoading(true);
         setError("");
+
+        if (password !== confirmPassword) {
+            setError("Las contraseñas no coinciden");
+            setLoading(false);
+            return;
+        }
 
         try {
             const res = await fetch("/api/register", {
@@ -30,9 +37,6 @@ export default function Register() {
 
             if (res.ok) {
                 setSuccess(true);
-                setTimeout(() => {
-                    router.push("/signin");
-                }, 2000);
             } else {
                 const data = await res.json();
                 setError(data.message || "Ocurrió un error en el registro");
@@ -49,8 +53,8 @@ export default function Register() {
             <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
                 <div style={{ textAlign: "center", background: "var(--surface-dark)", padding: "3rem", border: "1px solid var(--glass-border)", borderRadius: "10px", color: "var(--accent-red)" }} className="fade-in">
                     <Diamond size={32} style={{ margin: "0 auto 1.5rem" }} />
-                    <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Solicitud Aprobada</h2>
-                    <p style={{ color: "#fff" }}>Su portafolio ha sido creado. Redirigiendo al inicio de sesión...</p>
+                    <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Revise su Correo del Portafolio</h2>
+                    <p style={{ color: "#fff" }}>Hemos enviado un enlace de confirmación a su cuenta de correo electrónico. Por favor sígalo para activar su acceso exclusivo.</p>
                 </div>
             </main>
         );
@@ -99,6 +103,18 @@ export default function Register() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                            minLength={8}
+                            style={{ width: "100%", padding: "0.8rem", background: "rgba(0,0,0,0.5)", border: "1px solid var(--border-color)", color: "white", outline: "none" }}
+                        />
+                    </div>
+
+                    <div>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Confirmar Contraseña</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                             minLength={8}
                             style={{ width: "100%", padding: "0.8rem", background: "rgba(0,0,0,0.5)", border: "1px solid var(--border-color)", color: "white", outline: "none" }}
