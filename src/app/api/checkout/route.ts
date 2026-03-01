@@ -23,39 +23,57 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
         }
 
-        // Optimistically deduct stock from database
-        for (const item of items) {
-            // Find watch by ID
-            // Depending on how items are stored, we assume item.id corresponds to database ID
-            try {
-                // Determine if item matches string ID (cuid). We seeded with numeric IDs initially? Wait, 1, 2, 3 as strings
-                const watchId = String(item.id);
+        // Optimistically deduct stock from database and build secure preference items
+        const preferenceItems = [];
 
+        for (const item of items) {
+            try {
+                const watchId = String(item.id);
+                // Validate quantity to prevent negative stock injection
+                const requestedQuantity = Math.max(1, parseInt(item.quantity) || 1);
+
+                // Fetch real watch data from secure DB backend (Prevent Price Tampering)
+                const dbWatch = await prisma.watch.findUnique({
+                    where: { id: watchId }
+                });
+
+                if (!dbWatch) {
+                    throw new Error(`Watch with id ${watchId} not found in database`);
+                }
+
+                if (dbWatch.stock < requestedQuantity) {
+                    throw new Error(`Not enough stock for ${dbWatch.model}`);
+                }
+
+                // Deduct stock safely
                 await prisma.watch.update({
                     where: { id: watchId },
                     data: {
                         stock: {
-                            decrement: item.quantity || 1
+                            decrement: requestedQuantity
                         }
                     }
                 });
+
+                // Build MP item with 100% server-side authoritative pricing
+                preferenceItems.push({
+                    id: dbWatch.id,
+                    title: `${dbWatch.brand} ${dbWatch.model}`,
+                    description: `Luxury Timepiece - ${dbWatch.model}`,
+                    picture_url: dbWatch.image,
+                    category_id: 'watches',
+                    quantity: requestedQuantity,
+                    currency_id: 'UYU',
+                    unit_price: Number(dbWatch.priceValue) || 0, // SECURE: Uses DB price, ignoring client's payload price
+                });
             } catch (err) {
-                console.warn(`Could not decrease stock for item ${item.id}`, err);
+                console.warn(`Error processing item ${item.id} for checkout:`, err);
             }
         }
 
-        // Format items for Mercado Pago Preference
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const preferenceItems = items.map((item: any) => ({
-            id: item.id.toString(),
-            title: `${item.brand} ${item.model}`,
-            description: `Luxury Timepiece - ${item.model}`,
-            picture_url: item.image,
-            category_id: 'watches',
-            quantity: item.quantity,
-            currency_id: 'UYU',
-            unit_price: item.price,
-        }));
+        if (preferenceItems.length === 0) {
+            return NextResponse.json({ error: 'All requested items are out of stock or invalid' }, { status: 400 });
+        }
 
         const preference = new Preference(client);
 
