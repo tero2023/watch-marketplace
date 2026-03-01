@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export async function sendVerificationEmail(email: string, token: string) {
+export async function sendVerificationEmail(email: string, token: string, baseUrlUrl?: string) {
     let transporter;
 
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
@@ -28,7 +28,8 @@ export async function sendVerificationEmail(email: string, token: string) {
         });
     }
 
-    const verifyUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/verify?token=${token}`;
+    const finalBaseUrl = baseUrlUrl || process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const verifyUrl = `${finalBaseUrl}/api/verify?token=${token}`;
 
     const info = await transporter.sendMail({
         from: '"MICRON Timepieces" <noreply@micron-watches.com>', // dirección del remitente

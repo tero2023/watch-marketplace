@@ -37,8 +37,8 @@ export async function POST(req: Request) {
                 verifyToken
             }
         });
-
-        await sendVerificationEmail(user.email, verifyToken);
+        const origin = new URL(req.url).origin;
+        await sendVerificationEmail(user.email, verifyToken, origin);
 
         return NextResponse.json(
             { message: "Usuario creado exitosamente. Por favor, verifique su email.", user: { id: user.id, email: user.email, name: user.name } },
