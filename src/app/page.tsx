@@ -90,11 +90,11 @@ export default function Home() {
     },
     {
       id: 2,
-      brand: "Audemars Piguet",
-      model: "Royal Oak Openworked",
-      price: "$95,000",
-      image: "/images/audemars.png",
-      tag: "Exclusivo Boutique"
+      brand: "Seiko",
+      model: "Prospex PADI Diver",
+      price: "$650",
+      image: "/images/seiko_prospex.png",
+      tag: "Edición Especial"
     },
     {
       id: 3,
