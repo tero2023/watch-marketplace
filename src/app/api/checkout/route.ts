@@ -6,7 +6,7 @@ import { prisma } from "../../../lib/prisma";
 
 // Initialize the client with the access token
 const client = new MercadoPagoConfig({
-    accessToken: process.env.MP_ACCESS_TOKEN || 'APP_USR-8869a0ff-d361-4d5b-aa9c-f65d93d45948'
+    accessToken: process.env.MP_ACCESS_TOKEN || 'APP_USR-7530514088998188-022817-299f1faeebdbdec366ee98363aae1f01-2292323386'
 });
 
 export async function POST(request: Request) {
