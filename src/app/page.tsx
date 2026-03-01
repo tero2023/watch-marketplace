@@ -133,14 +133,14 @@ export default function Home() {
             <a href="#">Servicios</a>
             <a href="#">Nosotros</a>
           </div>
-          <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+          <div className="nav-actions">
             {session ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <span style={{ fontSize: "0.9rem", color: "#888", letterSpacing: "0.05em" }}>Bienvenido, <strong style={{ color: "var(--accent-red)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
-                <button className="btn-outline" onClick={() => signOut()} style={{ padding: "0.5rem 1.5rem" }}>Cerrar Sesión</button>
+              <div className="auth-actions">
+                <span className="welcome-text">Bienvenido, <strong style={{ color: "var(--accent-red)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
+                <button className="btn-outline auth-btn" onClick={() => signOut()}>Cerrar Sesión</button>
               </div>
             ) : (
-              <button className="btn-outline" onClick={() => router.push("/signin")} style={{ padding: "0.5rem 1.5rem" }}>Iniciar Sesión</button>
+              <button className="btn-outline auth-btn" onClick={() => router.push("/signin")}>Iniciar Sesión</button>
             )}
             <div style={{ position: "relative", cursor: "pointer" }} onClick={toggleCart}>
               <ShoppingBag style={{ opacity: 0.8 }} />
@@ -162,7 +162,7 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-content container slide-up">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem", color: "var(--accent-red)", letterSpacing: "0.2em", textTransform: "uppercase", fontSize: "0.8rem", padding: "0.5rem 1rem", border: "1px solid var(--border-color)", borderRadius: "20px", background: "rgba(0, 0, 0, 0.03)" }}>
+          <div className="hero-badge">
             <Diamond size={14} /> Solo Piezas Auténticas
           </div>
           <h1>Elegancia Atemporal, <br /> Redefinida.</h1>
@@ -172,19 +172,19 @@ export default function Home() {
             <button className="btn-outline">Ver Marcas</button>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: "4rem", marginTop: "5rem", opacity: 0.7 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <ShieldCheck size={24} color="var(--accent-red)" />
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Garantía</div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>100% Auténtico</div>
+          <div className="hero-features">
+            <div className="feature-item">
+              <ShieldCheck size={24} color="var(--accent-red)" className="feature-icon" />
+              <div className="feature-text">
+                <div className="feature-title">Garantía</div>
+                <div className="feature-subtitle">100% Auténtico</div>
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <Clock size={24} color="var(--accent-red)" />
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontWeight: 500, fontFamily: "var(--font-sans)", textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem" }}>Envío Asegurado</div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>Entrega Mundial</div>
+            <div className="feature-item">
+              <Clock size={24} color="var(--accent-red)" className="feature-icon" />
+              <div className="feature-text">
+                <div className="feature-title">Envío Asegurado</div>
+                <div className="feature-subtitle">Entrega Mundial</div>
               </div>
             </div>
           </div>
