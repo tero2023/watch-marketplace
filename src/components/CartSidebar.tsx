@@ -66,7 +66,7 @@ export default function CartSidebar() {
                 <div style={{ padding: '2rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <ShoppingBag color="var(--accent-red)" />
-                        <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-serif)', letterSpacing: '0.05em' }}>Su Archivo de Adquisición</h2>
+                        <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-serif)', letterSpacing: '0.05em' }}>Su Carrito</h2>
                     </div>
                     <button onClick={toggleCart} style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', padding: '0.5rem' }}>
                         <X size={24} />
@@ -76,7 +76,7 @@ export default function CartSidebar() {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     {items.length === 0 ? (
                         <div style={{ textAlign: 'center', color: '#666', marginTop: '4rem', fontFamily: 'var(--font-sans)' }}>
-                            <p>Su archivo de adquisición está actualmente vacío.</p>
+                            <p>Su carrito esta vacío.</p>
                             <button onClick={toggleCart} className="btn-outline" style={{ marginTop: '2rem' }}>Explorar Colección</button>
                         </div>
                     ) : (
