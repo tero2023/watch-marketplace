@@ -254,7 +254,7 @@ export default function Home() {
             <div>
               <h4>Soporte</h4>
               <ul>
-                <li><a href="mailto:thomas.muhm@gmail.com">Contáctenos</a></li>
+                <li><a href="mailto:micronwatches@gmail.com">Contáctenos</a></li>
                 <li><a href="#">Envíos y Devoluciones</a></li>
                 <li><a href="#">Garantía de Autenticidad</a></li>
                 <li><a href="#">Preguntas Frecuentes</a></li>
