@@ -53,7 +53,7 @@ export async function POST(request: Request) {
             picture_url: item.image,
             category_id: 'watches',
             quantity: item.quantity,
-            currency_id: 'USD',
+            currency_id: 'UYU',
             unit_price: item.price,
         }));
 
