@@ -183,7 +183,7 @@ export default function Home() {
           className="section-header scroll-reveal"
           ref={(el) => { revealRefs.current[0] = el; }}
         >
-          <h2>Piezas Destacadas</h2>
+          <h2>MODs</h2>
           <a href="#" className="view-all">Ver Todas</a>
         </div>
         <div className="watch-grid">
