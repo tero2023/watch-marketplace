@@ -178,6 +178,16 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="underwater-showcase">
+        <div className="underwater-watch-image fade-in" style={{ animationDelay: "0.2s" }} />
+        <div className="underwater-overlay" />
+        <div className="underwater-content container fade-in" style={{ animationDelay: "1s" }}>
+          <span className="underwater-badge">Inmersión Submarina</span>
+          <h2>Dominio de las Profundidades</h2>
+          <p>Experimente la extrema precisión de la ingeniería mecánica. Una inmersión total por el contorno del bisel, la caja y la válvula de escape subacuática.</p>
+        </div>
+      </section>
+
       <section className="featured-section container">
         <div
           className="section-header scroll-reveal"
