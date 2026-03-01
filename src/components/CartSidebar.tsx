@@ -137,8 +137,11 @@ export default function CartSidebar() {
                         >
                             {!session && <Lock size={16} />}
                             {session ? "Pagar con" : "Iniciar Sesión para Pagar con"}
-                            <span style={{ fontWeight: 800, letterSpacing: '-0.5px', marginLeft: '4px' }}>mercado</span>
-                            <span style={{ fontWeight: 400, letterSpacing: '-0.5px' }}>pago</span>
+                            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white', padding: '2px 8px', borderRadius: '12px', marginLeft: '6px' }}>
+                                <img src="/images/mp_logo.png" alt="Mercado Pago Logo" style={{ height: '20px', width: 'auto', objectFit: 'contain' }} />
+                                <span style={{ fontWeight: 800, letterSpacing: '-0.5px', marginLeft: '6px', color: '#009ee3' }}>mercado</span>
+                                <span style={{ fontWeight: 400, letterSpacing: '-0.5px', color: '#009ee3' }}>pago</span>
+                            </div>
                         </button>
                     </div>
                 )}
