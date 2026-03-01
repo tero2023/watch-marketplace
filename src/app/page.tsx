@@ -206,6 +206,9 @@ export default function Home() {
               <div className="watch-details">
                 <h3 className="watch-brand">{watch.brand}</h3>
                 <p className="watch-model">{watch.model}</p>
+                <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.2rem', marginBottom: '0.5rem' }}>
+                  En stock: {watch.stock}
+                </p>
                 <div className="watch-footer">
                   <span className="watch-price">{watch.price}</span>
                   <button
@@ -214,7 +217,7 @@ export default function Home() {
                     disabled={watch.stock <= 0}
                     style={{ opacity: watch.stock <= 0 ? 0.5 : 1, cursor: watch.stock <= 0 ? 'not-allowed' : 'pointer' }}
                   >
-                    Adquirir
+                    COMPRAR
                   </button>
                 </div>
               </div>
