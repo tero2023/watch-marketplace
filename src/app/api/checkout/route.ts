@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         }
 
         // Generate a unique and purely random order number (e.g. ORD-A8B9C1E2)
-        const orderNumber = `ORD-${crypto.randomUUID().split('-')[0].toUpperCase()}`;
+        const orderNumber = `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 
         // Optimistically deduct stock from database and build secure preference items
         const preferenceItems = [];
@@ -108,12 +108,24 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'All requested items are out of stock or invalid' }, { status: 400 });
         }
 
-        // Save order to the database
+        // Check if next-auth user ID is missing (default JWT behavior) and fetch user from DB if necessary
         const anyUser = session.user as any;
+        let dbUserId = anyUser?.id;
+
+        if (!dbUserId && session.user?.email) {
+            const dbUser = await prisma.user.findUnique({ where: { email: session.user.email } });
+            if (dbUser) dbUserId = dbUser.id;
+        }
+
+        if (!dbUserId) {
+            return NextResponse.json({ error: 'Failed to verify user identity for the order' }, { status: 400 });
+        }
+
+        // Save order to the database
         const dbOrder = await prisma.order.create({
             data: {
                 orderNumber,
-                userId: anyUser?.id as string,
+                userId: dbUserId,
                 shippingName: shipping.name,
                 shippingAddress: shipping.address,
                 shippingPhone: shipping.phone,
