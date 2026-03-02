@@ -250,7 +250,7 @@ export default function Home() {
                   En stock: {watch.stock}
                 </p>
                 <div className="watch-footer">
-                  <span className="watch-price">{watch.price}</span>
+                  <span className="watch-price">{watch.price} USD</span>
                   <button
                     className="btn-buy"
                     onClick={() => addItem(watch, watch.price)}

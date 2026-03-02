@@ -18,7 +18,7 @@ export default function CartSidebar() {
             style: 'currency',
             currency: 'USD',
             maximumFractionDigits: 0,
-        }).format(price);
+        }).format(price) + ' USD';
     };
 
     const handleCheckout = async () => {
