@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         const orderNumber = `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 
         // Optimistically deduct stock from database and build secure preference items
-        const preferenceItems = [];
+        const preferenceItems: any[] = [];
         let totalUsd = 0;
         let totalUy = 0;
 
@@ -51,56 +51,58 @@ export async function POST(request: Request) {
             console.error("Failed to fetch live exchange rate, using fallback", error);
         }
 
-        for (const item of items) {
-            try {
-                const watchId = String(item.id);
-                // Validate quantity to prevent negative stock injection
-                const requestedQuantity = Math.max(1, parseInt(item.quantity) || 1);
+        // Run an atomic transaction to check and deduct stock for all items
+        try {
+            await prisma.$transaction(async (tx) => {
+                for (const item of items) {
+                    const watchId = String(item.id);
+                    const requestedQuantity = Math.max(1, parseInt(item.quantity) || 1);
 
-                // Fetch real watch data from secure DB backend (Prevent Price Tampering)
-                const dbWatch = await prisma.watch.findUnique({
-                    where: { id: watchId }
-                });
+                    const dbWatch = await tx.watch.findUnique({
+                        where: { id: watchId }
+                    });
 
-                if (!dbWatch) {
-                    throw new Error(`Watch with id ${watchId} not found in database`);
-                }
-
-                if (dbWatch.stock < requestedQuantity) {
-                    throw new Error(`Not enough stock for ${dbWatch.model}`);
-                }
-
-                // Deduct stock safely
-                await prisma.watch.update({
-                    where: { id: watchId },
-                    data: {
-                        stock: {
-                            decrement: requestedQuantity
-                        }
+                    if (!dbWatch) {
+                        throw new Error(`Watch with id ${watchId} not found in database`);
                     }
-                });
 
-                const EXCHANGE_RATE_USD_TO_UYU = exchangeRateUsdToUyu;
-                const unitUsd = Number(dbWatch.priceValue) || 0;
-                const unitUy = Math.round(unitUsd * EXCHANGE_RATE_USD_TO_UYU); // Mercadopago UYU currency may require strict integers
+                    if (dbWatch.stock < requestedQuantity) {
+                        throw new Error(`Not enough stock for ${dbWatch.model}`);
+                    }
 
-                totalUsd += unitUsd * requestedQuantity;
-                totalUy += unitUy * requestedQuantity;
+                    // Deduct stock safely within the transaction
+                    await tx.watch.update({
+                        where: { id: watchId },
+                        data: {
+                            stock: {
+                                decrement: requestedQuantity
+                            }
+                        }
+                    });
 
-                // Build MP item with 100% server-side authoritative pricing
-                preferenceItems.push({
-                    id: dbWatch.id,
-                    title: `${dbWatch.brand} ${dbWatch.model}`,
-                    description: `Luxury Timepiece - ${dbWatch.model}`,
-                    picture_url: dbWatch.image,
-                    category_id: 'watches',
-                    quantity: requestedQuantity,
-                    currency_id: 'UYU',
-                    unit_price: unitUy, // SECURE: Uses DB price, converted USD to UYU
-                });
-            } catch (err) {
-                console.warn(`Error processing item ${item.id} for checkout:`, err);
-            }
+                    const EXCHANGE_RATE_USD_TO_UYU = exchangeRateUsdToUyu;
+                    const unitUsd = Number(dbWatch.priceValue) || 0;
+                    const unitUy = Math.round(unitUsd * EXCHANGE_RATE_USD_TO_UYU);
+
+                    totalUsd += unitUsd * requestedQuantity;
+                    totalUy += unitUy * requestedQuantity;
+
+                    // Build MP item with 100% server-side authoritative pricing
+                    preferenceItems.push({
+                        id: dbWatch.id,
+                        title: `${dbWatch.brand} ${dbWatch.model}`,
+                        description: `Luxury Timepiece - ${dbWatch.model}`,
+                        picture_url: dbWatch.image,
+                        category_id: 'watches',
+                        quantity: requestedQuantity,
+                        currency_id: 'UYU',
+                        unit_price: unitUy,
+                    });
+                }
+            });
+        } catch (err: any) {
+            console.warn(`Error processing checkout items:`, err);
+            return NextResponse.json({ error: err.message || 'One or more items are out of stock or invalid' }, { status: 400 });
         }
 
         if (preferenceItems.length === 0) {
