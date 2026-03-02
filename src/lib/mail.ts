@@ -94,13 +94,21 @@ export async function sendOrderConfirmation(
         });
     }
 
-    const itemsHtml = items.map(item => `
+    // We use item.title because preferenceItems maps brand+model to title for Mercado Pago.
+    // Also we divide the unit_price by the exchange rate to show the original USD price in the email, or calculate it.
+    // To keep it simple, we know totalUsd, let's just show the title and calculate approximate unit USD.
+    const itemsHtml = items.map(item => {
+        // We know totalUsd and totalUy. To get the USD price of this item:
+        const exchangeRate = totalUy / totalUsd;
+        const unitUsd = (item.unit_price / exchangeRate).toFixed(0);
+
+        return `
         <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.brand} ${item.model}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title || "Reloj"}</td>
             <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${item.unit_price} USD</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${unitUsd} USD</td>
         </tr>
-    `).join('');
+    `}).join('');
 
     const htmlContent = `
         <div style="font-family: sans-serif; background-color: #f4f4f4; padding: 40px;">
