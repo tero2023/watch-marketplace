@@ -28,8 +28,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Shipping information is incomplete' }, { status: 400 });
         }
 
-        // Generate a unique order number
-        const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        // Generate a unique and purely random order number (e.g. ORD-A8B9C1E2)
+        const orderNumber = `ORD-${crypto.randomUUID().split('-')[0].toUpperCase()}`;
 
         // Optimistically deduct stock from database and build secure preference items
         const preferenceItems = [];
