@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET || "watch_marketplace_secure_fallback_secret_12345",
     pages: {
         signIn: "/signin",
     }
