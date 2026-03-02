@@ -51,17 +51,24 @@ export default function CartSidebar() {
                 body: JSON.stringify({ items, shipping }),
             });
 
-            const data = await response.json();
+            let data: any;
+            try {
+                const textResponse = await response.text();
+                // Attempt to parse JSON; if the Vercel server crashed, it usually returns HTML, which breaks JSON parsing
+                data = JSON.parse(textResponse);
+            } catch (parseError) {
+                throw new Error("El servidor no devolvió una respuesta válida (Probablemente error de servidor).");
+            }
 
-            if (data.url) {
+            if (data?.url) {
                 window.location.href = data.url; // Redirect to MercadoPago
             } else {
                 console.error("No checkout URL returned", data);
-                alert(data.error || "Ocurrió un error inesperado al procesar tu solicitud.");
+                alert(data?.error || "Ocurrió un error inesperado al procesar tu solicitud.");
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Checkout error:", error);
-            alert("Hubo un error al inicializar el pago.");
+            alert(`Hubo un error al inicializar el pago: ${error?.message || ''}`);
         } finally {
             setIsSubmitting(false);
         }
