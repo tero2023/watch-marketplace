@@ -3,7 +3,6 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { prisma } from "../../../lib/prisma";
-import { sendOrderConfirmation } from "../../../lib/mail";
 
 // Initialize the client with the access token
 const client = new MercadoPagoConfig({
@@ -138,30 +137,13 @@ export async function POST(request: Request) {
             }
         });
 
-        // Send confirmation emails
-        if (session.user?.email) {
-            try {
-                // Ensure sendOrderConfirmation doesn't crash checkout if network fails
-                await sendOrderConfirmation(
-                    session.user.email,
-                    orderNumber,
-                    shipping,
-                    preferenceItems,
-                    totalUy,
-                    totalUsd
-                );
-            } catch (emailErr) {
-                console.error("Failed to send order email:", emailErr);
-            }
-        }
-
         const preference = new Preference(client);
 
         const result = await preference.create({
             body: {
                 items: preferenceItems,
                 back_urls: {
-                    success: `${new URL(request.url).origin}?status=success&order=${orderNumber}`,
+                    success: `${new URL(request.url).origin}/api/checkout/success`,
                     failure: `${new URL(request.url).origin}?status=failure&order=${orderNumber}`,
                     pending: `${new URL(request.url).origin}?status=pending&order=${orderNumber}`,
                 },
