@@ -57,7 +57,7 @@ export default function CartSidebar() {
                 window.location.href = data.url; // Redirect to MercadoPago
             } else {
                 console.error("No checkout URL returned", data);
-                alert("Faltan las credenciales de configuración de pago. Configure sus claves de MercadoPago en el archivo .env.");
+                alert(data.error || "Ocurrió un error inesperado al procesar tu solicitud.");
             }
         } catch (error) {
             console.error("Checkout error:", error);

@@ -83,7 +83,7 @@ export async function POST(request: Request) {
 
                 const EXCHANGE_RATE_USD_TO_UYU = exchangeRateUsdToUyu;
                 const unitUsd = Number(dbWatch.priceValue) || 0;
-                const unitUy = unitUsd * EXCHANGE_RATE_USD_TO_UYU;
+                const unitUy = Math.round(unitUsd * EXCHANGE_RATE_USD_TO_UYU); // Mercadopago UYU currency may require strict integers
 
                 totalUsd += unitUsd * requestedQuantity;
                 totalUy += unitUy * requestedQuantity;
@@ -141,6 +141,7 @@ export async function POST(request: Request) {
         // Send confirmation emails
         if (session.user?.email) {
             try {
+                // Ensure sendOrderConfirmation doesn't crash checkout if network fails
                 await sendOrderConfirmation(
                     session.user.email,
                     orderNumber,
@@ -175,8 +176,9 @@ export async function POST(request: Request) {
             url: result.init_point
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating Mercado Pago preference:', error);
-        return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
+        // Expose the MercadoPago validation error directly to the frontend so we don't get blind "Faltan credenciales" messages
+        return NextResponse.json({ error: error?.message || 'Failed to create checkout session' }, { status: 500 });
     }
 }

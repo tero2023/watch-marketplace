@@ -82,16 +82,8 @@ export async function sendOrderConfirmation(
             },
         });
     } else {
-        const testAccount = await nodemailer.createTestAccount();
-        transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false,
-            auth: {
-                user: testAccount.user,
-                pass: testAccount.pass,
-            },
-        });
+        console.warn("SMTP config missing. Emails are disabled to prevent Vercel timeout limits.");
+        return;
     }
 
     // We use item.title because preferenceItems maps brand+model to title for Mercado Pago.
