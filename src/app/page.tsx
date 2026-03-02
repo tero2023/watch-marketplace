@@ -149,6 +149,13 @@ export default function Home() {
             {session ? (
               <div className="auth-actions">
                 <span className="welcome-text">Bienvenido, <strong style={{ color: "var(--accent-red)", fontWeight: 400 }}>{session.user?.name?.split(' ')[0] || "Coleccionista"}</strong></span>
+
+                {(session.user as any)?.role === 'ADMIN' && (
+                  <button className="btn-outline auth-btn" onClick={() => router.push("/admin")} style={{ borderColor: "#1a472a", color: "#1a472a" }}>
+                    Admin Panel
+                  </button>
+                )}
+
                 <button className="btn-outline auth-btn" onClick={() => signOut()}>Cerrar Sesión</button>
               </div>
             ) : (
