@@ -136,7 +136,12 @@ export async function sendOrderConfirmation(
                         </tr>
                     </tfoot>
                 </table>
-                <p style="font-size: 0.85rem; color: #888;">Equivalente en moneda local aproximado: $${totalUy} UYU</p>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 30px;">Equivalente en moneda local aproximado: $${totalUy} UYU</p>
+                
+                <h3 style="margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px;">Contacto</h3>
+                <p style="color: #555; line-height: 1.6;">Ante cualquier consulta sobre el delivery o dudas sobre su adquisición, no dude en contactar a nuestro conserje:</p>
+                <p><strong>Micron Watches UY</strong></p>
+                <p><strong>Teléfono / WhatsApp:</strong> +598 99261918</p>
             </div>
         </div>
     `;
