@@ -26,6 +26,22 @@ export async function POST(request: Request) {
         // Optimistically deduct stock from database and build secure preference items
         const preferenceItems = [];
 
+        // Dynamically fetch live exchange rate from a public API
+        let exchangeRateUsdToUyu = 40; // Fallback rate
+        try {
+            const rateRes = await fetch('https://open.er-api.com/v6/latest/USD', {
+                next: { revalidate: 3600 } // Cache dynamically for 1 hour to prevent API rate limits
+            });
+            if (rateRes.ok) {
+                const rateData = await rateRes.json();
+                if (rateData?.rates?.UYU) {
+                    exchangeRateUsdToUyu = rateData.rates.UYU;
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch live exchange rate, using fallback", error);
+        }
+
         for (const item of items) {
             try {
                 const watchId = String(item.id);
@@ -55,8 +71,8 @@ export async function POST(request: Request) {
                     }
                 });
 
-                // Fixed Exchange Rate (You can connect this to a live API or DB variable later)
-                const EXCHANGE_RATE_USD_TO_UYU = 40;
+                // Live Exchange Rate
+                const EXCHANGE_RATE_USD_TO_UYU = exchangeRateUsdToUyu;
 
                 // Build MP item with 100% server-side authoritative pricing
                 preferenceItems.push({
