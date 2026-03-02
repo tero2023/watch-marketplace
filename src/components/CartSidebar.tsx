@@ -4,13 +4,21 @@ import { X, ShoppingBag, Trash2, Lock } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CartSidebar() {
     const { items, isOpen, toggleCart, removeItem, getCartTotal } = useCartStore();
     const { data: session } = useSession();
     const router = useRouter();
 
+    const [shipping, setShipping] = useState({
+        name: '', address: '', phone: '', city: '', state: '', zip: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     if (!isOpen) return null;
+
+    const isFormValid = Object.values(shipping).every(val => val.trim().length > 0);
 
     const total = getCartTotal();
     const formatPrice = (price: number) => {
@@ -28,14 +36,19 @@ export default function CartSidebar() {
             return;
         }
 
+        if (!isFormValid) {
+            alert("Por favor, rellene todos los campos de envío.");
+            return;
+        }
+
+        setIsSubmitting(true);
         try {
-            // We will implement this API route next
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ items }),
+                body: JSON.stringify({ items, shipping }),
             });
 
             const data = await response.json();
@@ -49,6 +62,8 @@ export default function CartSidebar() {
         } catch (error) {
             console.error("Checkout error:", error);
             alert("Hubo un error al inicializar el pago.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -113,6 +128,20 @@ export default function CartSidebar() {
                         <p style={{ fontSize: '0.75rem', color: '#666', marginBottom: '1.5rem', textAlign: 'center' }}>
                             El envío y el seguro de entrega se calcularán al pagar.
                         </p>
+                        <div style={{ padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px', marginBottom: '1.5rem' }}>
+                            <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', marginBottom: '1rem', color: '#333' }}>Datos de Envío</h4>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.8rem' }}>
+                                <input placeholder="Nombre completo" value={shipping.name} onChange={e => setShipping({ ...shipping, name: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                                <input placeholder="Teléfono" value={shipping.phone} onChange={e => setShipping({ ...shipping, phone: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                                <input placeholder="Dirección completa" value={shipping.address} onChange={e => setShipping({ ...shipping, address: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+                                    <input placeholder="Localidad/Ciudad" value={shipping.city} onChange={e => setShipping({ ...shipping, city: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                                    <input placeholder="Departamento" value={shipping.state} onChange={e => setShipping({ ...shipping, state: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                                </div>
+                                <input placeholder="Código Postal" value={shipping.zip} onChange={e => setShipping({ ...shipping, zip: e.target.value })} style={{ padding: '0.6rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '0.9rem' }} />
+                            </div>
+                        </div>
+
                         <button
                             style={{
                                 width: '100%',
@@ -121,27 +150,30 @@ export default function CartSidebar() {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 gap: '0.5rem',
-                                backgroundColor: '#009ee3', // MercadoPago Official Blue
+                                backgroundColor: isFormValid && !isSubmitting ? '#009ee3' : '#ccc',
                                 color: '#ffffff',
                                 border: 'none',
                                 borderRadius: '6px',
                                 fontWeight: 500,
                                 fontSize: '1rem',
-                                cursor: 'pointer',
+                                cursor: isFormValid && !isSubmitting ? 'pointer' : 'not-allowed',
                                 transition: 'background-color 0.2s ease',
                                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
                             }}
-                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#008bca'}
-                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#009ee3'}
+                            onMouseOver={(e) => { if (isFormValid && !isSubmitting) e.currentTarget.style.backgroundColor = '#008bca' }}
+                            onMouseOut={(e) => { if (isFormValid && !isSubmitting) e.currentTarget.style.backgroundColor = '#009ee3' }}
                             onClick={handleCheckout}
+                            disabled={!isFormValid || isSubmitting}
                         >
                             {!session && <Lock size={16} />}
-                            {session ? "Pagar con" : "Iniciar Sesión para Pagar con"}
-                            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white', padding: '2px 8px', borderRadius: '12px', marginLeft: '6px' }}>
-                                <img src="/images/mp_logo.png" alt="Mercado Pago Logo" style={{ height: '20px', width: 'auto', objectFit: 'contain' }} />
-                                <span style={{ fontWeight: 800, letterSpacing: '-0.5px', marginLeft: '6px', color: '#009ee3' }}>mercado</span>
-                                <span style={{ fontWeight: 400, letterSpacing: '-0.5px', color: '#009ee3' }}>pago</span>
-                            </div>
+                            {isSubmitting ? 'Procesando...' : (session ? "Pagar con" : "Iniciar Sesión para Pagar con")}
+                            {(!isSubmitting) && (
+                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white', padding: '2px 8px', borderRadius: '12px', marginLeft: '6px' }}>
+                                    <img src="/images/mp_logo.png" alt="Mercado Pago Logo" style={{ height: '20px', width: 'auto', objectFit: 'contain' }} />
+                                    <span style={{ fontWeight: 800, letterSpacing: '-0.5px', marginLeft: '6px', color: '#009ee3' }}>mercado</span>
+                                    <span style={{ fontWeight: 400, letterSpacing: '-0.5px', color: '#009ee3' }}>pago</span>
+                                </div>
+                            )}
                         </button>
                     </div>
                 )}

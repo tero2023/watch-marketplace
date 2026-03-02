@@ -60,3 +60,100 @@ export async function sendVerificationEmail(email: string, token: string, baseUr
         console.log("Enlace de vista previa de correo (Ethereal): %s", nodemailer.getTestMessageUrl(info));
     }
 }
+
+export async function sendOrderConfirmation(
+    buyerEmail: string,
+    orderNumber: string,
+    shippingInfo: any,
+    items: any[],
+    totalUy: number,
+    totalUsd: number
+) {
+    let transporter;
+
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+        transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            secure: Number(process.env.SMTP_PORT) === 465,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+        });
+    } else {
+        const testAccount = await nodemailer.createTestAccount();
+        transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+    }
+
+    const itemsHtml = items.map(item => `
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.brand} ${item.model}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${item.unit_price} USD</td>
+        </tr>
+    `).join('');
+
+    const htmlContent = `
+        <div style="font-family: sans-serif; background-color: #f4f4f4; padding: 40px;">
+            <div style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px;">
+                <h1 style="color: #C80000; letter-spacing: 0.1em; font-family: serif; text-align: center;">MICRON</h1>
+                <h2 style="color: #333; margin-bottom: 20px;">Orden Procesada: ${orderNumber}</h2>
+                <p style="color: #555; line-height: 1.6;">Gracias por tu orden en MICRON Timepieces.</p>
+                
+                <h3 style="margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px;">Detalles de Envío</h3>
+                <p><strong>Nombre:</strong> ${shippingInfo.name}</p>
+                <p><strong>Dirección:</strong> ${shippingInfo.address}</p>
+                <p><strong>Localidad:</strong> ${shippingInfo.city}</p>
+                <p><strong>Departamento:</strong> ${shippingInfo.state}</p>
+                <p><strong>Código Postal:</strong> ${shippingInfo.zip}</p>
+                <p><strong>Teléfono:</strong> ${shippingInfo.phone}</p>
+                
+                <h3 style="margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px;">Artículos</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; border-bottom: 2px solid #ddd; text-align: left;">Artículo</th>
+                            <th style="padding: 10px; border-bottom: 2px solid #ddd;">Cantidad</th>
+                            <th style="padding: 10px; border-bottom: 2px solid #ddd; text-align: right;">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold;">Total a Pagar (USD):</td>
+                            <td style="padding: 10px; text-align: right; font-weight: bold;">$${totalUsd} USD</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <p style="font-size: 0.85rem; color: #888;">Equivalente en moneda local aproximado: $${totalUy} UYU</p>
+            </div>
+        </div>
+    `;
+
+    // Enviar a comprador
+    await transporter.sendMail({
+        from: '"MICRON Timepieces" <noreply@micron-watches.com>',
+        to: buyerEmail,
+        subject: `Confirmación de Orden ${orderNumber} - MICRON`,
+        html: htmlContent,
+    });
+
+    // Enviar copia a la tienda
+    await transporter.sendMail({
+        from: '"MICRON Sistema" <noreply@micron-watches.com>',
+        to: "micronwatches@gmail.com",
+        subject: `NUEVA ORDEN RECIBIDA: ${orderNumber}`,
+        html: htmlContent,
+    });
+}

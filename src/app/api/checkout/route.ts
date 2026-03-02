@@ -3,6 +3,7 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { prisma } from "../../../lib/prisma";
+import { sendOrderConfirmation } from "../../../lib/mail";
 
 // Initialize the client with the access token
 const client = new MercadoPagoConfig({
@@ -17,14 +18,23 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { items } = body;
+        const { items, shipping } = body;
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
         }
 
+        if (!shipping || !shipping.name || !shipping.address || !shipping.city || !shipping.state || !shipping.phone) {
+            return NextResponse.json({ error: 'Shipping information is incomplete' }, { status: 400 });
+        }
+
+        // Generate a unique order number
+        const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
         // Optimistically deduct stock from database and build secure preference items
         const preferenceItems = [];
+        let totalUsd = 0;
+        let totalUy = 0;
 
         // Dynamically fetch live exchange rate from a public API
         let exchangeRateUsdToUyu = 40; // Fallback rate
@@ -71,8 +81,12 @@ export async function POST(request: Request) {
                     }
                 });
 
-                // Live Exchange Rate
                 const EXCHANGE_RATE_USD_TO_UYU = exchangeRateUsdToUyu;
+                const unitUsd = Number(dbWatch.priceValue) || 0;
+                const unitUy = unitUsd * EXCHANGE_RATE_USD_TO_UYU;
+
+                totalUsd += unitUsd * requestedQuantity;
+                totalUy += unitUy * requestedQuantity;
 
                 // Build MP item with 100% server-side authoritative pricing
                 preferenceItems.push({
@@ -83,7 +97,7 @@ export async function POST(request: Request) {
                     category_id: 'watches',
                     quantity: requestedQuantity,
                     currency_id: 'UYU',
-                    unit_price: (Number(dbWatch.priceValue) || 0) * EXCHANGE_RATE_USD_TO_UYU, // SECURE: Uses DB price, converted USD to UYU
+                    unit_price: unitUy, // SECURE: Uses DB price, converted USD to UYU
                 });
             } catch (err) {
                 console.warn(`Error processing item ${item.id} for checkout:`, err);
@@ -94,19 +108,52 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'All requested items are out of stock or invalid' }, { status: 400 });
         }
 
+        // Save order to the database
+        const anyUser = session.user as any;
+        const dbOrder = await prisma.order.create({
+            data: {
+                orderNumber,
+                userId: anyUser?.id as string,
+                shippingName: shipping.name,
+                shippingAddress: shipping.address,
+                shippingPhone: shipping.phone,
+                shippingCity: shipping.city,
+                shippingState: shipping.state,
+                shippingZip: shipping.zip,
+                totalAmount: totalUsd,
+                items: preferenceItems,
+                status: 'PENDING'
+            }
+        });
+
+        // Send confirmation emails
+        if (session.user?.email) {
+            try {
+                await sendOrderConfirmation(
+                    session.user.email,
+                    orderNumber,
+                    shipping,
+                    preferenceItems,
+                    totalUy,
+                    totalUsd
+                );
+            } catch (emailErr) {
+                console.error("Failed to send order email:", emailErr);
+            }
+        }
+
         const preference = new Preference(client);
 
         const result = await preference.create({
             body: {
                 items: preferenceItems,
                 back_urls: {
-                    success: `${new URL(request.url).origin}?status=success`,
-                    failure: `${new URL(request.url).origin}?status=failure`,
-                    pending: `${new URL(request.url).origin}?status=pending`,
+                    success: `${new URL(request.url).origin}?status=success&order=${orderNumber}`,
+                    failure: `${new URL(request.url).origin}?status=failure&order=${orderNumber}`,
+                    pending: `${new URL(request.url).origin}?status=pending&order=${orderNumber}`,
                 },
                 auto_return: 'approved',
-                // External reference can be an internal order ID
-                external_reference: `ORDER-${Date.now()}`,
+                external_reference: orderNumber,
             }
         });
 
